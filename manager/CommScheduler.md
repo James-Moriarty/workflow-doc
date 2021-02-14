@@ -2,21 +2,13 @@
 
 所属文件：kernel/CommScheduler.h
 
-该类也是一个接口类，主要操作都在`class Communicator`中，所以一下介绍也是在介绍`Communication`类
+该类也是一个接口类，主要操作都在`class Communicator`中，具体可见[[Communicator]]说明。
 
-### 初始化 init
+### 初始化
 
-`CommScheduler::init(size_t poller_threads, size_t handler_threads)`
-
-初始化的时候需要`poller`的线程数以及`handler`的线程数
-
-比较重要的三个成员为：
+初始化的时候指定`poller`和`handler`线程数，然后调用`Communicator`的初始化方法。
 
 ```c++
-class Communicator {	
-private:
-	struct __mpoller *mpoller;
-	struct __msgqueue *queue;
-	struct __thrdpool *thrdpool;
-}
+int init(size_t poller_threads, size_t handler_threads)
 ```
+
