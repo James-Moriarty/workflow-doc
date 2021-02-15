@@ -48,7 +48,10 @@ struct __poller {
 	// 各类回调函数
 	poller_message_t *(*create_message)(void *);
 	int (*partial_written)(size_t, void *);
+	
+	// 回调函数，执行communicator的callback，本质是将任务放到所属communicator的线程池中。
 	void (*cb)(struct poller_result *, void *);
+	// 所属的communicator
 	void *ctx;
 
 	// 各类fd
@@ -66,7 +69,8 @@ struct __poller {
 	struct rb_root timeo_tree;
 	// 定时器红黑树头结点
 	struct rb_node *tree_first;
-	// 定时器链表
+
+	// 定时器链表 存放已经超时的timer，每次epoll wait后遍历所有timer
 	struct list_head timeo_list;
 
 	struct list_head no_timeo_list;
@@ -84,6 +88,6 @@ struct __poller {
 4. 把`timerfd`加入`epoll`监听`fd`
 5. 创建新线程开始监听
 
-### timerfd
+### 定时任务
 
-对于定时器任务，采用了绝对时间的方式，每次`epoll_wait`之前都会将红黑树或链表将最近的`timer`添加到`timerfd`中。
+？TODO 为什么同时使用了一个红黑树和链表

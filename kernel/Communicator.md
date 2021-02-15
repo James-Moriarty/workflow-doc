@@ -29,16 +29,20 @@ private:
 
 2. mpoller_create
 
-创建`poller`
+创建[[mpoller]]，主要作用为`timer`以及`io`相关的监听。
 
 3. mpoller_start
 
-启动`poller`
+启动[[mpoller]]。
 
 4. create_handler_threads
 
-创建`handler`，实际为创建线程池
+创建`handler`，实际为创建[[thrdpool]]，用来处理各类任务，即线程池。
 
 5. thread_schedule
 
 启动线程池。
+
+### timer任务相关内容
+
+对于一个[[WFTimerTask]]任务，会新增一个`timer`到[[mpoller]]中。同时保留该`timer`的上下文。
