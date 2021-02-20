@@ -56,4 +56,19 @@ public:
 
 ### CommScheduler
 
-通用调度器，内部使用`__CommScheduler`单例来管理调度器。细节见[[CommScheduler]]
+通用调度器，内部使用`__CommScheduler`单例来管理调度器。
+
+该类为一个全局的调度器，所有任务都通过该类建立异步的任务。
+
+该类也是一个接口类，主要操作都在`class Communicator`中，具体内容可见[[Communicator]]说明。
+
+TODO：具体的作用
+
+### ExecManager
+
+ExecManager主要管理任务执行器以及任务队列。
+
+任务执行器本质是一个线程池，具体说明见[[Executor]]；
+任务队列为一个哈希表，保存不同名称的队列。
+
+所有有关计算的任务都由该`manager`进行管理与执行。

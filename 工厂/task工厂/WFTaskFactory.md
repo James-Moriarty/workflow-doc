@@ -14,6 +14,8 @@
 
 基本涵盖了大部分的使用场景。以下对各类`task`进行简单的介绍。
 
+PS：所有的任务都继承于[[SubTask基类]]
+
 ### 计数器任务
 
 计数器任务，具体的应用场景可见[[计数器任务]]，具体的说明见[[WFCounterTask]]。
@@ -70,3 +72,32 @@ public:
 										  timer_callback_t callback);
 }
 ```
+
+### go任务
+
+`go`任务类似`golang语言中的`go`命令，即：
+
+```go
+func go_task() {
+	sleep(5)
+}
+
+func main() {
+	...
+	go go_task
+	...
+}
+```
+
+`golang`是这样来实现异步操作的，在`workflow`中也提供了这种任务方式，具体细节可见[[WFGoTask]]
+
+```c++
+class WFTaskFactory {
+public:
+	template<class FUNC, class... ARGS>
+	static WFGoTask *create_go_task(const std::string& queue_name,
+									FUNC&& func, ARGS&&... args);
+}
+```
+
+另外需要特别注意的是，go任务没有回调函数。
