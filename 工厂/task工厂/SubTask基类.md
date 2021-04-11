@@ -50,7 +50,7 @@ public:
 
 1. `pointer`指针，保存的是当前任务所属的任务流，在`workflow`中所有的任务都处于某个任务流中
 2. `entry`指针
-3. `parent`指针
+3. `parent`指针，对于一个任务，它可能是并行任务中的一个子任务，因此在这里保存它所属的并行任务。
 
 ### 重要函数
 
@@ -84,6 +84,9 @@ void SubTask::subtask_done()
 		}
 		else if (parent)
 		{
+			// 运行到这里，说明当前Series中的任务已经执行完毕了
+			// 如果该任务属于某一个并行任务，则将并行任务中的待执行任务数量减1
+			// 如果所有任务都已经执行完毕，那么开始执行并行任务的callback
 			if (__sync_sub_and_fetch(&parent->nleft, 1) == 0)
 			{
 				cur = parent;
