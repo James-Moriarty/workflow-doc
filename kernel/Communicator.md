@@ -46,3 +46,35 @@ private:
 ### timer任务相关内容
 
 对于一个[[WFTimerTask]]任务，会新增一个`timer`到[[mpoller]]中。同时保留该`timer`的上下文。
+
+### 运行
+
+两个线程池 mpoller 和 handler；
+
+mpoller用于接收发送任务，同时也有定时任务；
+
+mpoller接收到任务后会将任务放入消息队列，handler用来处理后续的任务，一般来讲耗时的任务放入handler来处理；如果有更加重的任务，需要放到运算线程中进行处理。
+
+### mpoller
+
+创建poller时，会对poller的参数进行配置
+
+```c++
+struct poller_params params = {
+	.max_open_files		=	65535,
+	.create_message		=	Communicator::create_message,
+	.partial_written	=	Communicator::partial_written,
+	.callback			=	Communicator::callback,
+	.context			=	this
+};
+```
+
+#### `create_message`
+
+对于每一个链接，都有一个session来保存上下文，在poller接收到请求或返回内容时，会调用create_message函数来写数据，一般是调用session的`message_in()`获取存放数据的buffer（PS：发送时则调用`message_out()`）。
+
+#### `partial_written`
+
+#### `callback`
+
+当执行完毕时，poller会调用callback，其实是将上下文放入Communicator的队列，等待handler进行处理请求。
