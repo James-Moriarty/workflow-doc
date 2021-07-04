@@ -58,6 +58,7 @@ protected:
 
 private:	
 	// 当前还有多少子任务再运行
+	// 使用__sync_fetch_and_add来保证原子性
 	size_t nleft;
 	friend class SubTask;
 };
